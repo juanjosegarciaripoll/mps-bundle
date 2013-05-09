@@ -7,9 +7,12 @@ ROOT=$(CURDIR)
 LIBDIR=$(ROOT)/lib
 INCLUDEDIR=$(ROOT)/include
 BINDIR=$(ROOT)/bin
+#
+# Configuration flags, filled in by scripts/mps_env.sh
+#
 LDFLAGS=
 CPPFLAGS=
-
+LIBS=
 #
 # For rules that act on specific libraries
 #
@@ -55,11 +58,19 @@ $(BUILD)/Makefile: $(CONFIG)
 	mkdir -p $(BUILD)
 	mv $(TAG) $(NOTAG)
 	PATH=$(BINDIR):$$PATH; \
+	if [ -f $(ROOT)/scripts/mps_env.sh ]; then \
+	 . $(ROOT)/scripts/mps_env.sh; \
+	fi && \
 	cd $(BUILD) && \
 	$(CONFIG) --prefix=$(ROOT) --disable-shared \
-	   LDFLAGS="$(LDFLAGS) -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
-	   CPPFLAGS="$(CPPFLAGS) -I$(INCLUDEDIR)" 2>&1 | tee $(LOG)
+	   LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
+	   CPPFLAGS="$(CPPFLAGS) $$CPPFLAGS -I$(INCLUDEDIR)" \
+	   LIBS="$(LIBS) $$LIBS" \
+	   2>&1 | tee $(LOG)
 	PATH=$(BINDIR):$$PATH; \
+	if [ -f $(ROOT)/scripts/mps_env.sh ]; then \
+	 . $(ROOT)/scripts/mps_env.sh; \
+	fi && \
 	$(MAKE) -C $(BUILD) install 2>&1 | tee -a $(LOG)
 	mv $(NOTAG) $(TAG)
 
