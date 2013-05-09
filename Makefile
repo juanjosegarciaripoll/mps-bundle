@@ -23,12 +23,18 @@ NEWTAG=$(TAG)-new
 NOTAG=$(TAG)-no
 LOG=$(BUILD)/log
 
-.PHONY: all build update build-this pull-this update-this
+.PHONY: all build update build-this pull-this update-this build-f2c build-mps build-tensor
 
 all: $(LIBRARIES)
 
-build: $(LIBRARIES)
-	for i in $(LIBRARIES); do $(MAKE) build-this WHICH=$$i; done
+build: build-f2c build-tensor build-mps
+
+build-mps: build-tensor mps
+	$(MAKE) build-this WHICH=mps
+build-tensor: build-f2c tensor
+	$(MAKE) build-this WHICH=tensor
+build-f2c: f2c
+	$(MAKE) build-this WHICH=f2c
 
 update: $(LIBRARIES)
 	for i in $(LIBRARIES); do \
@@ -37,6 +43,10 @@ update: $(LIBRARIES)
 	done
 
 build-this: $(BUILD)/Makefile
+
+#
+# Not so obvious inter-dependencies
+#
 
 $(BUILD)/Makefile: $(CONFIG)
 	rm -rf $(BUILD)
