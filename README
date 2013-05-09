@@ -20,3 +20,8 @@ system will re-compile itself.
 The software will be installed in the bin/, include/, lib/ and shared/
 directories within mps-bundle, which means you can run this from your
 own home directory.
+
+Once the software is built and installed, you can use the directory
+'project/' to configure a Makefile that builds your programs. This file
+is customized for our group's needs, but it should be general enough
+for other purposes.
