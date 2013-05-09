@@ -1,0 +1,22 @@
+INTRODUCTION
+============
+
+This is a wrapper project that installs the mps and tensor libraries in a
+self-contained location, downloading them and building them with whatever
+systems are available in your computer. It also allows for rebuilding the
+software only when changes were done in the original repositories.
+
+INSTALLATION
+============
+
+No installation required. Type
+
+   # make build
+
+from the command line and it will start the process of downloading and
+configuring the software. At later times do 'make build' again and the
+system will re-compile itself.
+
+The software will be installed in the bin/, include/, lib/ and shared/
+directories within mps-bundle, which means you can run this from your
+own home directory.
