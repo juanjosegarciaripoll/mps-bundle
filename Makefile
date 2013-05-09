@@ -28,7 +28,7 @@ NEWTAG=$(TAG)-new
 NOTAG=$(TAG)-no
 LOG=$(BUILD)/log
 
-.PHONY: all build update build-this pull-this update-this build-f2c build-mps build-tensor
+.PHONY: all build update build-this pull-this update-this build-f2c build-mps build-tensor clean distclean
 
 all: $(LIBRARIES)
 
@@ -110,8 +110,7 @@ $(LIBRARIES):
 clean:
 	rm -rf bin build include lib shared .*-tag*
 
-distclean:
-	clean
+distclean: clean
 	rm -rf $(LIBRARIES)
 
 DEST=
@@ -119,6 +118,5 @@ upload:
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
-	   make clean; \
-	   rsync -rauvz --delete $(ROOT)/../mps-bundle $(DEST): ; \
+	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) project* $(DEST):mps-bundle ; \
 	fi
