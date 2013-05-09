@@ -108,18 +108,17 @@ $(LIBRARIES):
 	git clone http://github.com/juanjosegarciaripoll/$@
 
 clean:
-	rm -rf build
+	rm -rf bin build include lib shared .*-tag*
 
 distclean:
-	rm -rf $(LIBRARIES) build bin shared lib include .*-tag*
+	clean
+	rm -rf $(LIBRARIES)
 
 DEST=
 upload:
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
-	   rsync -rauvz --delete --exclude $(ROOT)/build --exclude $(ROOT)/bin \
-		--exclude $(ROOT)/lib --exclude $(ROOT)/include \
-		--exclude $(ROOT)/shared \
-		* $(DEST):mps-bundle/ ; \
+	   make clean; \
+	   rsync -rauvz --delete $(ROOT)/../mps-bundle $(DEST): ; \
 	fi
