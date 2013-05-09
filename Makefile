@@ -1,6 +1,8 @@
 LIBRARIES=f2c tensor mps
 
+#
 # Installation
+#
 ROOT=$(CURDIR)
 LIBDIR=$(ROOT)/lib
 INCLUDEDIR=$(ROOT)/include
@@ -74,19 +76,19 @@ update-this: $(WHICH)
 	git --git-dir=$(REPO) log -1 > $(NEWTAG)
 	if [ -f $(TAG) ]; then \
 	  if diff $(TAG) $(NEWTAG); then \
-	    echo *** ; \
-	    echo *** Library $(WHICH) needs no update; \
-	    echo *** ; \
+	    echo %%% ; \
+	    echo %%% Library $(WHICH) needs no update; \
+	    echo %%% ; \
 	  else \
-	    echo *** ; \
-	    echo *** Library $(WHICH) updated; \
-	    echo *** ; \
+	    echo %%% ; \
+	    echo %%% Library $(WHICH) updated; \
+	    echo %%% ; \
 	    rm $(TAG); mv $(NEWTAG) $(TAG); \
 	  fi; \
 	else \
-	  echo ***; \
-	  echo *** First time build of $(WHICH) ; \
-	  echo ***; \
+	  echo %%%; \
+	  echo %%% First time build of $(WHICH) ; \
+	  echo %%%; \
 	  mv $(NEWTAG) $(TAG); \
 	fi
 	rm -f $(NEWTAG)
