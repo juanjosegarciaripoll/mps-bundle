@@ -1,0 +1,9 @@
+f2c
+tensor
+mps
+build
+.*-tag*
+bin
+lib
+shared
+include
