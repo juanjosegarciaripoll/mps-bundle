@@ -12,14 +12,23 @@ CPPFLAGS=
 # For rules that act on specific libraries
 #
 WHICH=f2c
-NEWTAG=.$(WHICH)-new-tag
-TAG=.$(WHICH)-tag
-REPO=$(WHICH)/.git
+REPO=$(ROOT)/$(WHICH)/.git
 BUILD=$(ROOT)/build/$(WHICH)
 CONFIG=$(ROOT)/$(WHICH)/configure
+#
+# Temporary files
+#
+TAG=$(ROOT)/.$(WHICH)-tag
+NEWTAG=$(TAG)-new
+NOTAG=$(TAG)-no
 LOG=$(BUILD)/log
 
+.PHONY: all build update build-this pull-this update-this
+
 all: $(LIBRARIES)
+
+build: $(LIBRARIES)
+	for i in $(LIBRARIES); do $(MAKE) build-this WHICH=$$i; done
 
 update: $(LIBRARIES)
 	for i in $(LIBRARIES); do \
@@ -27,19 +36,20 @@ update: $(LIBRARIES)
 	  $(MAKE) update-this WHICH=$$i; \
 	done
 
-build-this: $(BUILD)
+build-this: $(BUILD)/Makefile
 
-$(BUILD): $(CONFIG)
+$(BUILD)/Makefile: $(CONFIG)
 	rm -rf $(BUILD)
 	mkdir -p $(BUILD)
+	mv $(TAG) $(NOTAG)
 	PATH=$(BINDIR):$$PATH; \
 	cd $(BUILD) && \
-	../$(WHICH)/configure --prefix=$HOME \
-	   --disable-shared \
-	   LDFLAGS="$(LDFLAGS) -L$(LIBDIR) -W,-l,-rpath,$(LIBDIR)" \
+	$(CONFIG) --prefix=$(ROOT) --disable-shared \
+	   LDFLAGS="$(LDFLAGS) -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
 	   CPPFLAGS="$(CPPFLAGS) -I$(INCLUDEDIR)" 2>&1 | tee $(LOG)
 	PATH=$(BINDIR):$$PATH; \
 	$(MAKE) -C $(BUILD) install 2>&1 | tee -a $(LOG)
+	mv $(NOTAG) $(TAG)
 
 $(CONFIG): $(TAG)
 	cd $(WHICH) && ./autogen.sh
@@ -49,22 +59,33 @@ pull-this: $(REPO)
 	git reset --hard && \
 	git pull
 
+$(TAG): update-this
 update-this: $(WHICH)
 	git --git-dir=$(REPO) log -1 > $(NEWTAG)
 	if [ -f $(TAG) ]; then \
 	  if diff $(TAG) $(NEWTAG); then \
-	    echo Library updated; \
-	    rm $(TAG); mv $(NEWTAG) $(TAG); \
+	    echo *** ; \
+	    echo *** Library $(WHICH) needs no update; \
+	    echo *** ; \
 	  else \
-	    echo Library needs no update; \
+	    echo *** ; \
+	    echo *** Library $(WHICH) updated; \
+	    echo *** ; \
+	    rm $(TAG); mv $(NEWTAG) $(TAG); \
 	  fi; \
 	else \
-	   mv $(NEWTAG) $(TAG); \
+	  echo ***; \
+	  echo *** First time build of $(WHICH) ; \
+	  echo ***; \
+	  mv $(NEWTAG) $(TAG); \
 	fi
-	rm -f $(WHICH)/$(NEWTAG)
+	rm -f $(NEWTAG)
 
 $(LIBRARIES):
 	git clone http://github.com/juanjosegarciaripoll/$@
 
+clean:
+	rm -rf build
+
 distclean:
-	rm -rf $(LIBRARIES) build bin shared lib include
+	rm -rf $(LIBRARIES) build bin shared lib include .*-tag*
