@@ -112,3 +112,14 @@ clean:
 
 distclean:
 	rm -rf $(LIBRARIES) build bin shared lib include .*-tag*
+
+DEST=
+upload:
+	if [ -z "$(DEST)" ]; then \
+	   echo Please specify a cluster through the variable DEST; \
+	else \
+	   rsync -rauvz --delete --exclude $(ROOT)/build --exclude $(ROOT)/bin \
+		--exclude $(ROOT)/lib --exclude $(ROOT)/include \
+		--exclude $(ROOT)/shared \
+		* $(DEST):mps-bundle/ ; \
+	fi
