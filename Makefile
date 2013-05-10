@@ -102,6 +102,7 @@ update-this: $(WHICH)
 
 $(LIBRARIES):
 	git clone http://github.com/juanjosegarciaripoll/$@
+	cd $@ && ./autogen.sh
 
 clean:
 	rm -rf bin build include lib shared .*-tag*
