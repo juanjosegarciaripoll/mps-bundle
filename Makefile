@@ -56,26 +56,20 @@ build-this: $(BUILD)/Makefile
 $(BUILD)/Makefile: $(CONFIG)
 	rm -rf $(BUILD)
 	mkdir -p $(BUILD)
-	mv $(TAG) $(NOTAG)
+	-mv $(TAG) $(NOTAG)
 	PATH=$(BINDIR):$$PATH; \
-	if [ -f $(ROOT)/scripts/mps_env.sh ]; then \
-	 . $(ROOT)/scripts/mps_env.sh; \
-	fi && \
-	cd $(BUILD) && \
-	$(CONFIG) --prefix=$(ROOT) --disable-shared \
+	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
+	(set && \
+	 cd $(BUILD) && \
+	 $(CONFIG) --prefix=$(ROOT) --disable-shared \
 	   LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
 	   CPPFLAGS="$(CPPFLAGS) $$CPPFLAGS -I$(INCLUDEDIR)" \
 	   LIBS="$(LIBS) $$LIBS" \
-	   2>&1 | tee $(LOG)
+	   2>&1) | tee $(LOG)
 	PATH=$(BINDIR):$$PATH; \
-	if [ -f $(ROOT)/scripts/mps_env.sh ]; then \
-	 . $(ROOT)/scripts/mps_env.sh; \
-	fi && \
+	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
 	$(MAKE) -C $(BUILD) install 2>&1 | tee -a $(LOG)
 	mv $(NOTAG) $(TAG)
-
-$(CONFIG): $(TAG)
-	cd $(WHICH) && ./autogen.sh
 
 pull-this: $(REPO)
 	cd $(WHICH) && \
@@ -95,12 +89,14 @@ update-this: $(WHICH)
 	    echo %%% Library $(WHICH) updated; \
 	    echo %%% ; \
 	    rm $(TAG); mv $(NEWTAG) $(TAG); \
+	    (cd $(WHICH) && ./autogen.sh); \
 	  fi; \
 	else \
 	  echo %%%; \
 	  echo %%% First time build of $(WHICH) ; \
 	  echo %%%; \
 	  mv $(NEWTAG) $(TAG); \
+	  (cd $(WHICH) && ./autogen.sh); \
 	fi
 	rm -f $(NEWTAG)
 
