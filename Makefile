@@ -53,10 +53,10 @@ build-this: $(BUILD)/Makefile
 # Not so obvious inter-dependencies
 #
 
-$(BUILD)/Makefile: $(CONFIG)
+$(BUILD)/Makefile: $(CONFIG) $(TAG)
 	rm -rf $(BUILD)
 	mkdir -p $(BUILD)
-	-mv $(TAG) $(NOTAG)
+	mv $(TAG) $(NOTAG)
 	PATH=$(BINDIR):$$PATH; \
 	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
 	(set && \
