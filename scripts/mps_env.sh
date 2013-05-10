@@ -1,10 +1,15 @@
-
 case `hostname -f` in
     login*mad) # CeSViMa
 	if [ "x$1" = "xtensor" ]; then
-	    export CPPFLAGS=-I/sw/openmpi/ATLAS/3.8.4-gnu64-4.3/include
-	    export LDFLAGS="-L/sw/openmpi/ATLAS/3.8.4-gnu64-4.3/lib"
-	    export LIBS="-llapack -lcblas -lf77blas -latlas -lgfortran"
+	# Atlas library
+	    # export CPPFLAGS=-I/sw/openmpi/ATLAS/3.8.4-gnu64-4.3/include
+	    # export LDFLAGS="-L/sw/openmpi/ATLAS/3.8.4-gnu64-4.3/lib"
+	    # export LIBS="-llapack -lcblas -lf77blas -latlas -lgfortran"
+	    # export CC=gcc-4.3
+	    # export CXX=g++-4.3
+	# ESSL library
+	    export CC="xlc -q64"
+	    export CXX="xlc -q64"
 	fi
 	;;
     master*csic.es) # trueno.iff.csic.es
