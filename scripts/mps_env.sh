@@ -9,7 +9,7 @@ case `hostname -f` in
 	    # export CXX=g++-4.3
 	# ESSL library
 	    export CC="xlc -q64"
-	    export CXX="xlc -q64"
+	    export CXX="xlC -q64"
 	fi
 	;;
     master*csic.es) # trueno.iff.csic.es
