@@ -111,7 +111,7 @@ distclean: clean
 	rm -rf $(LIBRARIES)
 
 DEST=
-upload:
+upload: $(LIBRARIES)
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
