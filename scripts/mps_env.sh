@@ -7,6 +7,7 @@ case `hostname -f` in
 	    # export LIBS="-llapack -lcblas -lf77blas -latlas -lgfortran"
 	    # export CC=gcc-4.3
 	    # export CXX=g++-4.3
+	    echo > /dev/null
 	fi
 	# ESSL library
 	export CC="xlc -q64"
