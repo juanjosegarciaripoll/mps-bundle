@@ -101,7 +101,7 @@ update-this: $(WHICH)
 	rm -f $(NEWTAG)
 
 $(LIBRARIES):
-	git clone http://github.com/juanjosegarciaripoll/$@
+	git clone https://github.com/juanjosegarciaripoll/$@
 	cd $@ && ./autogen.sh
 
 clean:
