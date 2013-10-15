@@ -20,6 +20,7 @@ WHICH=f2c
 REPO=$(ROOT)/$(WHICH)/.git
 BUILD=$(ROOT)/build/$(WHICH)
 CONFIG=$(ROOT)/$(WHICH)/configure
+CONFIG_FLAGS=
 #
 # Temporary files
 #
@@ -28,7 +29,8 @@ NEWTAG=$(TAG)-new
 NOTAG=$(TAG)-no
 LOG=$(BUILD)/log
 
-.PHONY: all build update build-this pull-this update-this build-f2c build-mps build-tensor clean distclean
+.PHONY: all build update build-this pull-this update-this \
+	build-f2c build-cblapack build-tensor build-mps clean distclean
 
 all: $(LIBRARIES)
 
@@ -37,14 +39,19 @@ build: build-f2c build-tensor build-mps
 build-mps: build-tensor mps
 	$(MAKE) build-this WHICH=mps
 build-tensor: build-f2c tensor
-	$(MAKE) build-this WHICH=tensor
+	if [ -d cblapack ]; then config="--with-cblapack";  make build-cblapack; fi
+	$(MAKE) build-this WHICH=tensor CONFIG_FLAGS="--with-cblapack"
+build-cblapack: build-f2c
+	$(MAKE) build-this WHICH=cblapack
 build-f2c: f2c
 	$(MAKE) build-this WHICH=f2c
 
 update: $(LIBRARIES)
-	for i in $(LIBRARIES); do \
-	  $(MAKE) pull-this WHICH=$$i; \
-	  $(MAKE) update-this WHICH=$$i; \
+	for i in $(LIBRARIES) cblapack; do \
+	  if test -d $$i; then \
+	    $(MAKE) pull-this WHICH=$$i; \
+	    $(MAKE) update-this WHICH=$$i; \
+	  fi \
 	done
 
 build-this: $(BUILD)/Makefile
@@ -61,7 +68,7 @@ $(BUILD)/Makefile: $(CONFIG) $(TAG)
 	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
 	(set && \
 	 cd $(BUILD) && \
-	 $(CONFIG) --prefix=$(ROOT) --disable-shared \
+	 $(CONFIG) --prefix=$(ROOT) --disable-shared $(CONFIG_FLAGS) \
 	   LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
 	   CPPFLAGS="$(CPPFLAGS) $$CPPFLAGS -I$(INCLUDEDIR)" \
 	   LIBS="$(LIBS) $$LIBS" \
@@ -69,6 +76,7 @@ $(BUILD)/Makefile: $(CONFIG) $(TAG)
 	PATH=$(BINDIR):$$PATH; \
 	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
 	$(MAKE) -C $(BUILD) install 2>&1 | tee -a $(LOG)
+	-$(MAKE) -C $(BUILD) install-doxygen-doc 2>&1 | tee -a $(LOG)
 	mv $(NOTAG) $(TAG)
 
 pull-this: $(REPO)
@@ -100,7 +108,7 @@ update-this: $(WHICH)
 	fi
 	rm -f $(NEWTAG)
 
-$(LIBRARIES):
+$(LIBRARIES) cblapack:
 	git clone https://github.com/juanjosegarciaripoll/$@
 	cd $@ && ./autogen.sh
 
@@ -108,12 +116,14 @@ clean:
 	rm -rf bin build include lib shared .*-tag*
 
 distclean: clean
-	rm -rf $(LIBRARIES)
+	rm -rf $(LIBRARIES) cblapack
 
 DEST=
 upload: $(LIBRARIES)
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
-	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) project* $(DEST):mps-bundle ; \
+	   if [ -d cblapack ]; then extras="cblapack"; fi
+	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) $cblapack \
+		project* $(DEST):mps-bundle ; \
 	fi
