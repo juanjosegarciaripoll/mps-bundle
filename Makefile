@@ -127,3 +127,6 @@ upload: $(LIBRARIES)
 	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) \
 		$extras project* $(DEST):mps-bundle ; \
 	fi
+
+upload-doc: build
+	rsync -rauvz --delete share/doc/* $DEST
