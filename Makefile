@@ -86,7 +86,7 @@ pull-this: $(REPO)
 
 $(TAG): update-this
 update-this: $(WHICH)
-	git --git-dir=$(REPO) log -1 > $(NEWTAG)
+	git --git-dir=$(REPO) log -1 > $(NEWTAG) || date > $(NEWTAG)
 	if [ -f $(TAG) ]; then \
 	  if diff $(TAG) $(NEWTAG); then \
 	    echo %%% ; \
