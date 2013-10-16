@@ -124,6 +124,6 @@ upload: $(LIBRARIES)
 	   echo Please specify a cluster through the variable DEST; \
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi
-	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) $cblapack \
-		project* $(DEST):mps-bundle ; \
+	   rsync -rauvz --delete script* Makefile README $(LIBRARIES) \
+		$extras project* $(DEST):mps-bundle ; \
 	fi
