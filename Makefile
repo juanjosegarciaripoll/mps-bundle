@@ -125,7 +125,7 @@ upload: $(LIBRARIES)
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi; \
 	   rsync -ruvz --delete script* Makefile README $(LIBRARIES) \
-		$extras $(DEST):mps-bundle ; \
+		$$extras $(DEST):mps-bundle ; \
 	   rsync -ruvz project* $(DEST):mps-bundle; \
 	fi
 
