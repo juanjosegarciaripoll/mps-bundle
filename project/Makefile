@@ -1,7 +1,7 @@
 PROGRAM=exp_0.exe
 
 %.exe: %.cc common.cc
-	$(CXX) -o $@ $< `tensor-config --cppflags` `tensor-config --cxxflags` -O2 -lmps `tensor-config --ldflags`
+	../bin/tensor-config --link -o $@ $< -O2 -lmps
 
 all: $(PROGRAM)
 
