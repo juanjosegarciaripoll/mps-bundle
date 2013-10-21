@@ -40,7 +40,7 @@ build-mps: build-tensor mps
 	$(MAKE) build-this WHICH=mps
 build-tensor: build-f2c tensor
 	if [ -d cblapack ]; then config="--with-cblapack";  make build-cblapack; fi
-	$(MAKE) build-this WHICH=tensor CONFIG_FLAGS="--with-cblapack"
+	$(MAKE) build-this WHICH=tensor CONFIG_FLAGS="$config"
 build-cblapack: build-f2c
 	$(MAKE) build-this WHICH=cblapack
 build-f2c: f2c
