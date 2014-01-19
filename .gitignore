@@ -1,9 +1,10 @@
 f2c
 tensor
+cblapack
 mps
 build
 .*-tag*
 bin
 lib
-shared
+share
 include
