@@ -24,7 +24,7 @@ CONFIG_FLAGS=
 #
 # Temporary files
 #
-TAG=$(ROOT)/.$(WHICH)-tag
+TAG=$(ROOT)/lib/.$(WHICH)-tag
 NEWTAG=$(TAG)-new
 NOTAG=$(TAG)-no
 LOG=$(BUILD)/log
@@ -46,58 +46,42 @@ build-cblapack: build-f2c
 build-f2c: f2c
 	$(MAKE) build-this WHICH=f2c
 
+#
+# Ensure git is up-to-date
+#
 update: $(LIBRARIES)
 	for i in $(LIBRARIES) cblapack; do \
 	  if test -d $$i; then \
 	    $(MAKE) pull-this WHICH=$$i; \
-	    $(MAKE) update-this WHICH=$$i; \
 	  fi \
 	done
 
-build-this: $(BUILD)/Makefile
-
-#
-# Not so obvious inter-dependencies
-#
-
-$(BUILD)/Makefile: $(CONFIG) $(TAG)
-	rm -rf $(BUILD)
-	mkdir -p $(BUILD)
-	mv $(TAG) $(NOTAG)
-	PATH=$(BINDIR):$$PATH; \
-	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
-	(set && \
-	 cd $(BUILD) && \
-	 $(CONFIG) --prefix=$(ROOT) --disable-shared $(CONFIG_FLAGS) \
-	   LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
-	   CPPFLAGS="$(CPPFLAGS) $$CPPFLAGS -I$(INCLUDEDIR)" \
-	   LIBS="$(LIBS) $$LIBS" \
-	   2>&1) | tee $(LOG)
-	PATH=$(BINDIR):$$PATH; \
-	. $(ROOT)/scripts/mps_env.sh $(WHICH); \
-	$(MAKE) -C $(BUILD) install 2>&1 | tee -a $(LOG)
-	-$(MAKE) -C $(BUILD) install-doxygen-doc 2>&1 | tee -a $(LOG)
-	mv $(NOTAG) $(TAG)
-
 pull-this: $(REPO)
+	test "x$(WHICH)" != "x"
 	cd $(WHICH) && \
 	git reset --hard && \
 	git pull
 
-$(TAG): update-this
-update-this: $(WHICH)
-	git --git-dir=$(REPO) log -1 > $(NEWTAG) || date > $(NEWTAG)
+#
+# Build only if version has changed or the tag file is absent
+#
+build-this:
+	test "x$(WHICH)" != "x"
+	git --git-dir=$(REPO) log -1 > $(NEWTAG) || date > $(NEWTAG); \
+	echo %%%; echo %%% Current version; echo %%%; cat $(NEWTAG); \
 	if [ -f $(TAG) ]; then \
+	  echo %%%; echo %%% Last build ; echo %%%; cat $(TAG); \
 	  if diff $(TAG) $(NEWTAG); then \
 	    echo %%% ; \
-	    echo %%% Library $(WHICH) needs no update; \
+	    echo %%% Library $(WHICH) needs no rebuilding; \
 	    echo %%% ; \
 	  else \
 	    echo %%% ; \
-	    echo %%% Library $(WHICH) updated; \
+	    echo %%% Library $(WHICH) must be rebuilt; \
 	    echo %%% ; \
 	    rm $(TAG); mv $(NEWTAG) $(TAG); \
 	    (cd $(WHICH) && ./autogen.sh); \
+	    make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
 	  fi; \
 	else \
 	  echo %%%; \
@@ -105,8 +89,28 @@ update-this: $(WHICH)
 	  echo %%%; \
 	  mv $(NEWTAG) $(TAG); \
 	  (cd $(WHICH) && ./autogen.sh); \
-	fi
+	  make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
+	fi; \
 	rm -f $(NEWTAG)
+
+do-build:
+	test "x$(WHICH)" != "$(WHICH)"
+	rm -rf $(BUILD) $(NOTAG)
+	mkdir -p $(BUILD)
+	mv $(TAG) $(NOTAG)
+	PATH=$(BINDIR):$$PATH; \
+	  . $(ROOT)/scripts/mps_env.sh $(WHICH); \
+	  set && \
+	  cd $(BUILD) && \
+	  $(CONFIG) --prefix=$(ROOT) --disable-shared $(CONFIG_FLAGS) \
+	    LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
+	    CPPFLAGS="$(CPPFLAGS) $$CPPFLAGS -I$(INCLUDEDIR)" \
+	    LIBS="$(LIBS) $$LIBS"
+	PATH=$(BINDIR):$$PATH; \
+	  . $(ROOT)/scripts/mps_env.sh $(WHICH); \
+	  $(MAKE) -C $(BUILD) install
+	-$(MAKE) -C $(BUILD) install-doxygen-doc
+	mv $(NOTAG) $(TAG)
 
 $(LIBRARIES) cblapack:
 	git clone https://github.com/juanjosegarciaripoll/$@
