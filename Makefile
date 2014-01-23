@@ -61,6 +61,7 @@ pull-this: $(REPO)
 	cd $(WHICH) && \
 	git reset --hard && \
 	git pull
+	./autogen.sh
 
 #
 # Build only if version has changed or the tag file is absent
@@ -80,7 +81,6 @@ build-this:
 	    echo %%% Library $(WHICH) must be rebuilt; \
 	    echo %%% ; \
 	    rm $(TAG); mv $(NEWTAG) $(TAG); \
-	    (cd $(WHICH) && ./autogen.sh); \
 	    make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
 	  fi; \
 	else \
@@ -124,11 +124,12 @@ distclean: clean
 
 DEST=
 upload: $(LIBRARIES)
+	make update
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi; \
-	   rsync -rauvz --delete lib .*tag script* Makefile README $(LIBRARIES) \
+	   rsync -raucvz --delete lib .*tag script* Makefile README $(LIBRARIES) \
 		$$extras project* $(DEST):mps-bundle ; \
 	fi
 
