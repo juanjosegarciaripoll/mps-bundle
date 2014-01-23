@@ -69,6 +69,7 @@ pull-this: $(REPO)
 #
 build-this:
 	test "x$(WHICH)" != "x"
+	-mkdir -p lib
 	git --git-dir=$(REPO) log -1 > $(NEWTAG) || date > $(NEWTAG); \
 	echo %%%; echo %%% Current version; echo %%%; cat $(NEWTAG); \
 	if [ -f $(TAG) ]; then \
@@ -130,7 +131,7 @@ upload: $(LIBRARIES)
 	   echo Please specify a cluster through the variable DEST; \
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi; \
-	   rsync -raucvz $(RSYNC_FLAGS) --delete lib .*tag script* \
+	   rsync -raucvz $(RSYNC_FLAGS) --delete lib/ .*tag script* \
 		Makefile README $(LIBRARIES) \
 		$$extras project* $(DEST):mps-bundle ; \
 	fi
