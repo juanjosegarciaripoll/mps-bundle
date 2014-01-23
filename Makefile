@@ -61,7 +61,7 @@ pull-this: $(REPO)
 	test "x$(WHICH)" != "x"
 	cd $(WHICH) && \
 	git reset --hard && \
-	git pull
+	git pull && \
 	./autogen.sh
 
 #
@@ -90,7 +90,6 @@ build-this:
 	  echo %%% First time build of $(WHICH) ; \
 	  echo %%%; \
 	  mv $(NEWTAG) $(TAG); \
-	  (cd $(WHICH) && ./autogen.sh); \
 	  make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
 	fi; \
 	rm -f $(NEWTAG)
@@ -131,7 +130,7 @@ upload: $(LIBRARIES)
 	   echo Please specify a cluster through the variable DEST; \
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi; \
-	   rsync -raucvz $(RSYNC_FLAGS) --delete lib/ .*tag script* \
+	   rsync -raucvz $(RSYNC_FLAGS) .*tag script* \
 		Makefile README $(LIBRARIES) \
 		$$extras project* $(DEST):mps-bundle ; \
 	fi
