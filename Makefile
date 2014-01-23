@@ -7,6 +7,7 @@ ROOT=$(CURDIR)
 LIBDIR=$(ROOT)/lib
 INCLUDEDIR=$(ROOT)/include
 BINDIR=$(ROOT)/bin
+RSYNC_FLAGS=
 #
 # Configuration flags, filled in by scripts/mps_env.sh
 #
@@ -129,7 +130,8 @@ upload: $(LIBRARIES)
 	   echo Please specify a cluster through the variable DEST; \
 	else \
 	   if [ -d cblapack ]; then extras="cblapack"; fi; \
-	   rsync -raucvz --delete lib .*tag script* Makefile README $(LIBRARIES) \
+	   rsync -raucvz $(RSYNC_FLAGS) --delete lib .*tag script* \
+		Makefile README $(LIBRARIES) \
 		$$extras project* $(DEST):mps-bundle ; \
 	fi
 
