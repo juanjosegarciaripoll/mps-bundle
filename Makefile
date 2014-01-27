@@ -118,7 +118,7 @@ $(LIBRARIES) cblapack:
 	cd $@ && ./autogen.sh
 
 clean:
-	rm -rf bin build include lib/* shared .*-tag*
+	rm -rf bin build include lib/* lib/.*tag* shared .*-tag*
 
 distclean: clean
 	rm -rf $(LIBRARIES) cblapack
