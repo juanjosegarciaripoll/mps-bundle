@@ -12,8 +12,6 @@ case `hostname -f` in
 	#export CXX="xlC -q64"
 	;;
     master*csic.es) # trueno.iff.csic.es
-	. /opt/intel/mkl/10.0.5.025/tools/environment/mklvars64.sh
-	. /opt/intel/bin/compilervars.sh intel64
 	export CC=icc
 	export CXX=icpc
 	#export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
