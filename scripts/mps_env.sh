@@ -13,18 +13,26 @@ case `hostname -f` in
     master*csic.es) # trueno.iff.csic.es
 	if [ "x$1" = "xtensor" ]; then
 	    . /opt/intel/mkl/10.0.5.025/tools/environment/mklvars64.sh
-	fi
-	;;
-    ita*csic.es) # trueno.iff.csic.es Itanium
-	if [ "x$1" = "xtensor" ]; then
-	    . /opt/intel/mkl/10.0.5.025/tools/environment/mklvarsem64t.sh
+	    . /opt/intel/mkl/bin/compilervars.sh intel64
+	    export CC=icc
+	    export CXX=icpc
+	    export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -freg-struct-return -finline-functions"
+	    export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -freg-struct-return -finline-functions"
 	fi
 	;;
     *)
 	if [ "x$1" = "xtensor" ]; then
 	    if [ -f /opt/intel/mkl/bin/mklvars.sh ]; then
 		. /opt/intel/mkl/bin/mklvars.sh intel64
-		export LDFLAGS="-L/opt/intel/mkl/lib -Wl,-rpath,/opt/intel/mkl/lib"
+	    fi
+	    if [ -f /opt/intel/bin/compilervars.sh ]; then
+		. /opt/intel/mkl/bin/compilervars.sh intel64
+	    fi
+	    if which icc > /dev/null; then
+		export CC=icc
+		export CXX=icpc
+		export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -freg-struct-return -finline-functions"
+		export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -freg-struct-return -finline-functions"
 	    fi
 	fi
 esac
