@@ -1,3 +1,4 @@
+set -x
 case `hostname -f` in
     login*mad) # CeSViMa
 	# Atlas library
@@ -11,29 +12,25 @@ case `hostname -f` in
 	#export CXX="xlC -q64"
 	;;
     master*csic.es) # trueno.iff.csic.es
-	if [ "x$1" = "xtensor" ]; then
-	    . /opt/intel/mkl/10.0.5.025/tools/environment/mklvars64.sh
-	    . /opt/intel/bin/compilervars.sh intel64
-	    export CC=icc
-	    export CXX=icpc
-	    export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -freg-struct-return -finline-functions"
-	    export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -freg-struct-return -finline-functions"
-	fi
+	. /opt/intel/mkl/10.0.5.025/tools/environment/mklvars64.sh
+	. /opt/intel/bin/compilervars.sh intel64
+	export CC=icc
+	export CXX=icpc
+	export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
+	export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
 	;;
     *)
-	if [ "x$1" = "xtensor" ]; then
-	    if [ -f /opt/intel/mkl/bin/mklvars.sh ]; then
-		. /opt/intel/mkl/bin/mklvars.sh intel64
-	    fi
-	    if [ -f /opt/intel/bin/compilervars.sh ]; then
-		. /opt/intel/bin/compilervars.sh intel64
-	    fi
-	    if which icc > /dev/null; then
-		export CC=icc
-		export CXX=icpc
-		export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -freg-struct-return -finline-functions"
-		export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -freg-struct-return -finline-functions"
-	    fi
+	if [ -f /opt/intel/mkl/bin/mklvars.sh ]; then
+	    . /opt/intel/mkl/bin/mklvars.sh intel64
+	fi
+	if [ -f /opt/intel/bin/compilervars.sh ]; then
+	    . /opt/intel/bin/compilervars.sh intel64
+	fi
+	if which icc > /dev/null; then
+	    export CC=icc
+	    export CXX=icpc
+	    export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
+	    export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
 	fi
 esac
 
