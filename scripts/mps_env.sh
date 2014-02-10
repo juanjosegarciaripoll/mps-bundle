@@ -15,8 +15,7 @@ case `hostname -f` in
 	export CC=icc
 	export CXX=icpc
 	export CFLAGS="$CFLAGS -fomit-frame-pointer -finline-functions"
-	export CXXFLAGS="$CXXFLAGS 
-	-fno-exceptions -fomit-frame-pointer -finline-functions"
+	export CXXFLAGS="$CXXFLAGS -fno-exceptions -fomit-frame-pointer -finline-functions"
 	#export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
 	#export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
 	;;
