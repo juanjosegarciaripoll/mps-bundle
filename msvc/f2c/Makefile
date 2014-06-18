@@ -195,16 +195,23 @@ I77_files = \
 	lib\wsne.obj \
 	lib\xwsne.obj
 
+headers=..\include\f2c_inline.h \
+	..\include\f2c.h
+
 libf2c_objs= $(F77_files) $(I77_files)
+
+TARGETS=..\bin\f2c.exe ..\lib\f2c.lib $(headers)
 
 .SUFFIXES: .c .obj
 
 {$(srcdir)/src}.c{obj}.obj:
-	$(CC) $(CFLAGS) /I. /I$(srcdir)/src /c /Fo$@ $<
+	$(CC) $(CFLAGS) /I../include /I. /I$(srcdir)/src /c /Fo$@ $<
 {$(srcdir)/lib}.c{lib}.obj:
-	$(CC) $(CFLAGS) /I. /I$(srcdir)/include /c /Fo$@ $<
+	$(CC) $(CFLAGS) /I../include /I. /I$(srcdir)/include /c /Fo$@ $<
+{$(srcdir)/include}.h{../include}.h:
+	copy $< $@
 
-all: ..\bin\f2c.exe
+all: $(TARGETS)
 
 ..\bin\f2c.exe: $(f2c_objs)
 	$(LINK) -out:$@ $(f2c_objs)
@@ -213,5 +220,8 @@ all: ..\bin\f2c.exe
 	-del $@
 	$(LINK) -lib -out:$@ $(libf2c_objs)
 
+$(headers):
+	copy ..\..\f2c\src\$@ $@
+
 clean:
-	-del $(libf2c_objs) $(f2c_objs) ..\bin\f2c.exe ..\lib\f2c.lib
+	-del $(libf2c_objs) $(f2c_objs) $(TARGETS)
