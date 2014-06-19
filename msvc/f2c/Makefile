@@ -207,10 +207,8 @@ TARGETS=..\bin\f2c.exe ..\lib\f2c.lib $(headers)
 .SUFFIXES: .c .obj
 
 {$(srcdir)/src}.c{obj}.obj:
-	-if not exist obj md obj
 	$(CC) $(CFLAGS) $(CPPFLAGS) /c /Fo$@ $<
 {$(srcdir)/lib}.c{lib}.obj:
-	-if not exist lib md lib
 	$(CC) $(CFLAGS) $(CPPFLAGS) /c /Fo$@ $<
 
 {$(srcdir)/include}.h{../include}.h:
