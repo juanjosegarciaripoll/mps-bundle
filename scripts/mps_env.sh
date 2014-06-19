@@ -1,5 +1,21 @@
 set -x
 case `hostname -f` in
+    master*csic.es) # trueno.iff.csic.es
+	export CC=icc
+	export CXX=icpc
+	export CFLAGS="$CFLAGS -fomit-frame-pointer -finline-functions"
+	export CXXFLAGS="$CXXFLAGS -fno-exceptions -fomit-frame-pointer -finline-functions"
+	#export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
+	#export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
+	;;
+    loginidp*mad) # XCeSViMa
+	# Atlas library
+	export PATH=`pwd`/../bin:$PATH
+	export CC=icc
+	export CXX=icpc
+	export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
+	export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
+	;;
     login*mad) # CeSViMa
 	# Atlas library
 	export CPPFLAGS=-I/sw/openmpi/ATLAS/3.8.4-gnu64-4.3/include
