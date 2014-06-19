@@ -14,6 +14,7 @@ lapack_objs=$(lapack_pre:src/=)
 
 headers=..\include\cblapack.h\
 	..\include\cblapack\blas.h \
+	..\include\cblapack\cblas.h \
 	..\include\cblapack\clapack.h
 
 TARGETS=..\lib\blas.lib ..\lib\cblas.lib ..\lib\lapack.lib $(headers)
