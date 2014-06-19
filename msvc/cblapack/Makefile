@@ -38,6 +38,7 @@ all: $(TARGETS)
 	$(LINK) -lib -out:$@ $(blas_objs)
 
 $(headers):
+	-mkdir ..\include\cblapack
 	copy ..\..\cblapack\blas\$@ $@
 
 clean:
