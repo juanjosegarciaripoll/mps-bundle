@@ -42,7 +42,7 @@ $(headers):
 	copy ..\..\cblapack\blas\$@ $@
 
 clean:
-	-del blas\*.obj
-	-del cblas\*.obj
-	-del lapack\*.obj
-	-del $(TARGETS)
+	-for %f in (blas\*.objs) do del %f
+	-for %f in (cblas\*.obj) do del %f
+	-for %f in (lapack\*.objs) do del %f
+	-for %f in ($(TARGETS)) do del %f
