@@ -2,6 +2,8 @@ srcdir=../../f2c
 
 CC=cl
 LINK=link
+CPPFLAGS=/I. /I../include /I$(srcdir)/include
+CFLAGS=/O2 /nologo
 
 f2c_objs = \
 	obj\main.obj \
@@ -205,9 +207,12 @@ TARGETS=..\bin\f2c.exe ..\lib\f2c.lib $(headers)
 .SUFFIXES: .c .obj
 
 {$(srcdir)/src}.c{obj}.obj:
-	$(CC) $(CFLAGS) /I../include /I. /I$(srcdir)/src /c /Fo$@ $<
+	-if not exist obj md obj
+	$(CC) $(CFLAGS) $(CPPFLAGS) /c /Fo$@ $<
 {$(srcdir)/lib}.c{lib}.obj:
-	$(CC) $(CFLAGS) /I../include /I. /I$(srcdir)/include /c /Fo$@ $<
+	-if not exist lib md lib
+	$(CC) $(CFLAGS) $(CPPFLAGS) /c /Fo$@ $<
+
 {$(srcdir)/include}.h{../include}.h:
 	copy $< $@
 
@@ -224,4 +229,4 @@ $(headers):
 	copy ..\..\f2c\src\$@ $@
 
 clean:
-	-del $(libf2c_objs) $(f2c_objs) $(TARGETS)
+	-for %f in ($(libf2c_objs) $(f2c_objs) $(TARGETS)) do if exist %f del %f
