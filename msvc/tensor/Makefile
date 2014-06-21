@@ -1,45 +1,15 @@
 srcdir=..\..\tensor
 includedir=..\include\tensor
+top_builddir=..
 
 CXX=cl
 LINK=link
 CPPFLAGS=/I. /I..\include
 CXXFLAGS=/O2 /nologo /EHsc
 
-headers= \
-	$(includedir)\arpack.h \
-	$(includedir)\arpack_d.h \
-	$(includedir)\arpack_z.h \
-	$(includedir)\detail\common.h \
-	$(includedir)\detail\functional.h \
-	$(includedir)\detail\io.hpp \
-	$(includedir)\detail\refcount.hpp \
-	$(includedir)\detail\sparse_base.hpp \
-	$(includedir)\detail\sparse_kron.hpp \
-	$(includedir)\detail\sparse_ops.hpp \
-	$(includedir)\detail\tensor_base.hpp \
-	$(includedir)\detail\tensor_kron.hpp \
-	$(includedir)\detail\tensor_matrix.hpp \
-	$(includedir)\detail\tensor_ops.hpp \
-	$(includedir)\detail\tensor_reshape.hpp \
-	$(includedir)\detail\tensor_slice.hpp \
-	$(includedir)\gen.h \
-	$(includedir)\indices.h \
-	$(includedir)\io.h \
-	$(includedir)\jobs.h \
-	$(includedir)\linalg.h \
-	$(includedir)\numbers.h \
-	$(includedir)\rand.h \
-	$(includedir)\refcount.h \
-	$(includedir)\sdf.h \
-	$(includedir)\sparse.h \
-	$(includedir)\tensor.h \
-	$(includedir)\tensor_blas.h \
-	$(includedir)\tensor_lapack.h \
-	$(includedir)\tools.h \
-	$(includedir)\vector.h \
-	$(includedir)\fftw.h \
-	$(includedir)\config.h
+include ..\..\tensor\include\Makefile.am
+headers= $(nobase_include_HEADERS:tensor/=$(includedir))
+orig_headers= $(nobase_include_HEADERS:tensor/=$(srcdir)/include/tensor/)
 
 tensor_objs=\
 	tools\tictoc.obj \
@@ -212,9 +182,9 @@ $(tensor_objs): ..\include\tensor\config.h
 
 all: $(TARGETS)
 
-$(headers): $(srcdir)\include\tensor\*
+$(headers) $(includedir)\config.h: $(srcdir)\include\tensor
 	-md ..\include\tensor
-	-md arpack compare fftw indices linalg rand sdf sparse tensor tools views
+	-md arpack compare fftw generated indices linalg rand sdf sparse tensor tools views
 	xcopy /y /s $(srcdir)\include\tensor ..\include\tensor
 	copy config.h $(includedir)
 
@@ -223,4 +193,4 @@ $(headers): $(srcdir)\include\tensor\*
 
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
-	-for %f in (arpack compare fftw indices linalg rand sdf sparse tensor tools views $(includedir)) do if exist %f rd /s /q %f
+	-for %f in (arpack compare fftw generated indices linalg rand sdf sparse tensor tools views $(includedir)) do if exist %f rd /s /q %f
