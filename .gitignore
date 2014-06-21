@@ -1,3 +1,4 @@
+!/msvc
 f2c
 tensor
 cblapack
