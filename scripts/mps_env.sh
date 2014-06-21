@@ -27,6 +27,24 @@ case `hostname -f` in
 	#export CC="xlc -q64"
 	#export CXX="xlC -q64"
 	;;
+    master*csic.es) # trueno.iff.csic.es
+	export CC=icc
+	export CXX=icpc
+	export CFLAGS="$CFLAGS -fomit-frame-pointer -finline-functions"
+	export CXXFLAGS="$CXXFLAGS -fno-exceptions -fomit-frame-pointer -finline-functions"
+	#export CFLAGS="$CFLAGS -xHost -fomit-frame-pointer -finline-functions"
+	#export CXXFLAGS="$CXXFLAGS -xHost -fno-exceptions -fomit-frame-pointer -finline-functions"
+	;;
+    *.iff.csic.es)
+	. /opt/intel/mkl/bin/mklvars.sh intel64
+	. /opt/intel/bin/compilervars.sh intel64
+	export CC=icc
+	export CXX=icpc
+	export CFLAGS="-g -O2 -debug full"
+	export CXXFLAGS="-g -O2 -fno-exceptions -finline-functions -debug full"
+	#export CFLAGS="-g -O2 -xHOST -fomit-frame-pointer -finline-functions"
+	#export CXXFLAGS="-g -O2 -xHOST -fomit-frame-pointer -finline-functions -fno-exceptions"
+	;;
     *)
 	if [ -f /opt/intel/mkl/bin/mklvars.sh ]; then
 	    . /opt/intel/mkl/bin/mklvars.sh intel64
