@@ -9,10 +9,10 @@
 
 /* Define to a macro mangling the given C identifier (in lower and upper
    case), which must not contain underscores, for linking with Fortran. */
-#define F77_FUNC(x) x##_
+#define F77_FUNC(x,f) x##_
 
 /* As F77_FUNC, but for C identifiers containing underscores. */
-#define F77_FUNC_(x) x##_
+#define F77_FUNC_(x,f) x##_
 
 /* Define if F77 and FC dummy `main' functions are identical. */
 /*#undef FC_DUMMY_MAIN_EQ_F77*/
