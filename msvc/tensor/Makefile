@@ -7,19 +7,28 @@ LINK=link
 CPPFLAGS=/I. /I..\include
 CXXFLAGS=/O2 /nologo /EHsc
 
+
+
 include ..\..\tensor\include\Makefile.am
 include ..\..\tensor\src\Makefile.inc
 
 headers= $(nobase_include_HEADERS:tensor/=$(includedir))
 orig_headers= $(nobase_include_HEADERS:tensor/=$(srcdir)/include/tensor/)
 tensor_objs= $(basic_SOURCES:.cc=.obj) \
-	$(rand32_SOURCES:.cc=.obj)
+	$(rand32_SOURCES:.cc=.obj) \
+	$(arpack_SOURCES:.cc=.obj) \
+	$(arpack_f2c_SOURCES:.cc=.obj)
 directories= arpack compare fftw generated indices linalg \
-	rand sdf sparse tensor tools views
+	rand sdf sparse tensor tools views arpack-ng
 
 TARGETS=..\lib\tensor.lib
 
 .SUFFIXES: .cc .obj
+
+{$(srcdir)/arpack-ng}.f{arpack-ng}.obj:
+	..\bin\f2c.exe $< -o foo.c
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ foo.c
+	del foo.c
 
 $(tensor_objs): ..\include\tensor\config.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $(srcdir)/src/$(@:.obj=.cc)
