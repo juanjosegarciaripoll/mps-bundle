@@ -65,7 +65,10 @@ pull-this: $(REPO)
 	./autogen.sh
 
 push:
-	for i in cblapack tensor f2c mps; do (test -d $$i && cd $$i && git push); done
+	for i in cblapack tensor f2c mps ./; do (test -d $$i && cd $$i && git push); done
+
+status:
+	for i in cblapack tensor f2c mps ./; do (test -d $$i && echo Checking $$i && cd $$i && git push); done
 
 #
 # Build only if version has changed or the tag file is absent
