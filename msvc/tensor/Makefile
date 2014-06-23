@@ -15,25 +15,27 @@ include ..\..\tensor\src\Makefile.inc
 headers= $(nobase_include_HEADERS:tensor/=$(includedir))
 orig_headers= $(nobase_include_HEADERS:tensor/=$(srcdir)/include/tensor/)
 tensor_objs= $(basic_SOURCES:.cc=.obj) \
-	$(rand32_SOURCES:.cc=.obj) \
-	$(arpack_SOURCES:.cc=.obj) \
-	$(arpack_f2c_SOURCES:.cc=.obj)
+	$(rand32_SOURCES:.cc=.obj)
+arpack_aux= $(arpack_SOURCES:.f=.obj)
+arpack_objs= $(arpack_aux:.cc=.obj)
 directories= arpack compare fftw generated indices linalg \
 	rand sdf sparse tensor tools views arpack-ng
 
 TARGETS=..\lib\tensor.lib
 
-.SUFFIXES: .cc .obj
+.SUFFIXES: .cc .obj .f
 
-{$(srcdir)/arpack-ng}.f{arpack-ng}.obj:
+{$(srcdir)/src/arpack-ng}.f{arpack-ng}.obj:
 	..\bin\f2c.exe $< -o foo.c
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ foo.c
 	del foo.c
+{$(srcdir)/src/arpack}.cc{arpack}.obj:
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $<
+
+all: $(TARGETS)
 
 $(tensor_objs): ..\include\tensor\config.h
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $(srcdir)/src/$(@:.obj=.cc)
-
-all: $(TARGETS)
 
 $(headers) $(includedir)\config.h: $(srcdir)\include\tensor
 	-md ..\include\tensor
@@ -41,8 +43,8 @@ $(headers) $(includedir)\config.h: $(srcdir)\include\tensor
 	xcopy /y /s $(srcdir)\include\tensor ..\include\tensor
 	copy config.h $(includedir)
 
-..\lib\tensor.lib: $(tensor_objs)
-	$(LINK) -out:$@ $(tensor_objs)
+..\lib\tensor.lib: $(tensor_objs) $(arpack_objs)
+	lib /out:$@ $(tensor_objs) $(arpack_objs)
 
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
