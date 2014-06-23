@@ -4,10 +4,11 @@ INTRODUCTION
 This is a wrapper project that installs the mps and tensor libraries in a
 self-contained location, downloading them and building them with whatever
 systems are available in your computer. It also allows for rebuilding the
+
 software only when changes were done in the original repositories.
 
-INSTALLATION
-============
+INSTALLATION (Unix)
+===================
 
 No installation required. Type
 
@@ -25,3 +26,33 @@ Once the software is built and installed, you can use the directory
 'project/' to configure a Makefile that builds your programs. This file
 is customized for our group's needs, but it should be general enough
 for other purposes.
+
+INSTALLATION (Windows)
+======================
+
+You need a working copy of Microsoft's Visual Studio C++ (native, not
+managed) or Microsoft's C/C++ compiler. The libraries build at least
+with the following combinations:
+
+* Microsoft Visual C/C++ professional version
+* Microsoft Visual Studio Express 2008-2010 installed together
+  with Microsoft Windows SDK (we need the 'nmake' in SDK).
+* The Microsoft Windows SDK standalone version, prior to 2013,
+  because it shipped with a version of the compiler.
+* Visual Studio Express 2013 C++.
+
+You need to download the sources of the 'f2c', 'cblapack', 'tensor' and
+'mps' libraries within the 'mps-bundle' directory. They can be retrieved
+from the same github repository as where you got this distribuion.
+
+Open a terminal that has access to the command line version of the
+compiler. Typically, if the VS is installed in "Program Files/Visual
+Studio 2008" you will see a file called "vcvarsall.bat" Other
+combinations contain documents that explain how to do this, or simply
+install icons in the menu to open terminals that access the compilers.
+
+Within this terminal, enter the directory mps-bundle/msvc and call
+'nmake'. This should build the libraries msvc/lib/mps.lib,
+msvc/lib/tensor.lib, msvc/lib/cblapack.lib, msvc/lib/f2c.lib. You can
+configure your projects to link against these libraries, using the
+header files in msvc/include.
