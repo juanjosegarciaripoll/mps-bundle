@@ -19,7 +19,7 @@ tensor_objs= $(basic_SOURCES:.cc=.obj) \
 arpack_aux= $(arpack_SOURCES:.f=.obj)
 arpack_objs= $(arpack_aux:.cc=.obj)
 directories= arpack compare fftw generated indices linalg \
-	rand sdf sparse tensor tools views arpack-ng tests
+	rand sdf sparse tensor tools views arpack-ng tests profile
 
 TARGETS=..\lib\tensor.lib
 
@@ -62,12 +62,29 @@ check: $(all_tests)
 	-if not exist test md test
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $<
 {$(srcdir)/test}.cc{test}.exe:
-	$(CXX) $(CPPFLAGS) /I$(srcdir)\test /Fo$@ $< test.lib
+	$(CXX) $(CPPFLAGS) /I$(srcdir)\test /Fo$@ $< tests/test.lib
 {test}.exe{test}.log:
 	$< > $@
 
 test.lib: $(test_objs) all
 	lib /out:$@ $(test_objs)
+
+############################################################
+# PROFILE
+#
+
+all_prof_programs = profilebin\prof_vector.exe
+
+profile: $(all_prof_programs)
+	for %f in ($(all_prof_programs)) do %f
+
+{$(srcdir)\profile}.cc{profilebin}.exe:
+	-if not exist profilebin md profilebin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /I$(srcdir)\profile /Fe$@ /Foprofilebin\foo.obj $< ../lib/tensor.lib ../lib/lapack.lib ../lib/cblas.lib ../lib/blas.lib ../lib/f2c.lib
+	del profilebin\foo.obj
+profile.log: $(all_prof_programs) profilebin\mytee.exe
+	-if exist $@ del $@
+	for %f in ($(all_prof_programs)) do %f >> $@
 
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
