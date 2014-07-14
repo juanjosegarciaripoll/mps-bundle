@@ -85,3 +85,4 @@ profile.log: $(all_prof_programs) profilebin\mytee.exe
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
 	-for %f in ($(directories) $(includedir) test) do if exist %f rd /s /q %f
+	-del *.pdb

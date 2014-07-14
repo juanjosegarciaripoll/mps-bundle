@@ -36,3 +36,4 @@ $(mps_headers): $(srcdir)\include\mps
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
 	-for %f in ($(directories) $(includedir)) do if exist %f rd /s /q %f
+	-del *.pdb

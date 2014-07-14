@@ -227,3 +227,5 @@ $(headers):
 
 clean:
 	-for %f in ($(libf2c_objs) $(f2c_objs) $(TARGETS)) do if exist %f del %f
+	-del *.pdb
+

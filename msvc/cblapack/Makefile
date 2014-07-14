@@ -51,3 +51,4 @@ clean:
 	-for %f in (blas\*.obj cblas\*.obj lapack\*.obj) do if exist %f del %f
 	-for %f in ($(TARGETS)) do if exist %f del %f
 	-rd ..\include\cblapack
+	-del *.pdb
