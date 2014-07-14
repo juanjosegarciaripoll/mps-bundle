@@ -11,6 +11,7 @@ include
 *.obj
 *.lib
 *.exe
+*.pdb
 !/msvc
 !/msvc/tensor
 !/msvc/mps
