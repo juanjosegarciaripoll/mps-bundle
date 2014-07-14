@@ -4,8 +4,8 @@ includedir=..\include\mps
 CXX=cl
 LINK=lib
 CPPFLAGS=/I. /I..\include
-CXXFLAGS=/O2 /nologo /EHsc
 
+include ..\Makefile.flags
 include ..\..\mps\src\Makefile.am
 include ..\..\mps\include\Makefile.am
 
@@ -31,7 +31,7 @@ $(mps_headers): $(srcdir)\include\mps
 	copy config.h $(includedir)
 
 ..\lib\mps.lib: $(mps_objects)
-	$(LINK) /out:$@ $(mps_objects)
+	$(LINK) -lib /out:$@ $(mps_objects)
 
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f

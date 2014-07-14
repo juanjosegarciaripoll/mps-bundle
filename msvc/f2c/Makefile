@@ -1,9 +1,7 @@
 srcdir=../../f2c
 
-CC=cl
-LINK=link
 CPPFLAGS=/I. /I../include /I$(srcdir)/include
-CFLAGS=/O2 /nologo
+include ../Makefile.flags
 
 f2c_objs = \
 	obj\main.obj \
@@ -198,7 +196,8 @@ I77_files = \
 	lib\xwsne.obj
 
 headers=..\include\f2c_inline.h \
-	..\include\f2c.h
+	..\include\f2c.h \
+	..\include\f2c_types_win.h
 
 libf2c_objs= $(F77_files) $(I77_files)
 

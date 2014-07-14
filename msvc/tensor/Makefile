@@ -2,13 +2,9 @@ srcdir=..\..\tensor
 includedir=..\include\tensor
 top_builddir=..
 
-CXX=cl
-LINK=link
 CPPFLAGS=/I. /I..\include
-CXXFLAGS=/O2 /nologo /EHsc
 
-
-
+include ..\Makefile.flags
 include ..\..\tensor\include\Makefile.am
 include ..\..\tensor\src\Makefile.inc
 
@@ -44,7 +40,7 @@ $(headers) $(includedir)\config.h: $(srcdir)\include\tensor
 	copy config.h $(includedir)
 
 ..\lib\tensor.lib: $(tensor_objs) $(arpack_objs)
-	lib /out:$@ $(tensor_objs) $(arpack_objs)
+	$(LINK) -lib /out:$@ $(tensor_objs) $(arpack_objs)
 
 ############################################################
 # TEST WITH GOOGLE TESTS
