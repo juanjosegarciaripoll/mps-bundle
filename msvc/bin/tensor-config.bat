@@ -1,4 +1,4 @@
-@echo on
+@echo off
 set BATCHDIR=%~dp0
 set TENSORDIR=%BATCHDIR%..
 if "%1" == "--debug" goto debug
