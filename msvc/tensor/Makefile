@@ -76,7 +76,7 @@ check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	$(CXX) $(CPPFLAGS) /I$(srcdir)/src /I$(srcdir)\test /Fo$(@:.exe=.obj) /Fe$@ $< \
 		test/test_main.obj test/test.lib ..\lib\tensor.lib \
 		..\lib\lapack.lib ..\lib\blas.lib ..\lib\cblas.lib ..\lib\f2c.lib \
-		..\lib\gtest.lib
+		..\lib\gtest.lib advapi32.lib
 
 test/test.lib: $(test_objs) all
 	lib /out:$@ $(test_objs)
