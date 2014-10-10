@@ -11,6 +11,7 @@ include ..\..\mps\include\Makefile.am
 
 mps_headers=$(nobase_include_HEADERS:mps/=$(includedir)\) \
 	$(includedir)\config.h
+mps_orig_headers=$(nobase_include_HEADERS:mps/=..\include\mps\)
 mps_objects=$(libmps_la_SOURCES:.cc=.obj)
 mps_objects=$(mps_objects:/=\)
 directories=iTEBD quantum hamiltonian tools evolve dmrg mps
@@ -21,7 +22,7 @@ TARGETS=..\lib\mps.lib
 
 all: $(TARGETS)
 
-$(mps_objects): ..\include\mps\config.h
+$(mps_objects): ..\include\mps\config.h $(mps_orig_headers)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $(srcdir)/src/$(@:.obj=.cc)
 
 $(mps_headers): $(srcdir)\include\mps
@@ -55,7 +56,8 @@ all_test_programs = test\test_quantum_spin.exe				\
 	test\test_itebd_expected_slow.exe test\test_itebd_itime.exe	\
 	test\test_time_solver_trotter2.exe				\
 	test\test_time_solver_trotter3.exe				\
-	test\test_time_solver_arnoldi.exe test\test_dmrg.exe
+	test\test_time_solver_arnoldi.exe test\test_dmrg.exe            \
+	test\test_mps_lform.exe test\test_mps_simplify_obc.exe
 
 check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	for %f in ($(all_test_programs)) do %f
@@ -69,15 +71,18 @@ check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	-if not exist test md test
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $<
 {$(srcdir)/test}.cc{test}.exe:
-	$(CXX) $(CPPFLAGS) /I$(srcdir)/src /I$(srcdir)\test /Fo$(@:.exe=.obj) /Fe$@ $< \
-		test/test_main.obj test/test.lib ..\lib\mps.lib ..\lib\tensor.lib \
-		..\lib\lapack.lib ..\lib\blas.lib ..\lib\cblas.lib ..\lib\f2c.lib \
-		..\lib\gtest.lib
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /I$(srcdir)/src			\
+		/I$(srcdir)\test /Fo$(@:.exe=.obj) /Fe$@ $<		\
+		test/test_main.obj test/test.lib ..\lib\mps.lib		\
+		..\lib\tensor.lib ..\lib\lapack.lib ..\lib\blas.lib	\
+		..\lib\cblas.lib ..\lib\f2c.lib ..\lib\gtest.lib	\
+		advapi32.lib
 test/test_dmrg.exe: $(srcdir)/test/test_dmrg.cc
-	$(CXX) $(CPPFLAGS) /I$(srcdir)/src /I$(srcdir)\test /Fe$@ $(srcdir)/test/test_dmrg.cc \
-		test/test.lib ..\lib\mps.lib ..\lib\tensor.lib \
-		..\lib\lapack.lib ..\lib\blas.lib ..\lib\cblas.lib ..\lib\f2c.lib \
-		..\lib\gtest.lib
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /I$(srcdir)/src			\
+		/I$(srcdir)\test /Fe$@ $(srcdir)/test/test_dmrg.cc	\
+		test/test.lib ..\lib\mps.lib ..\lib\tensor.lib		\
+		..\lib\lapack.lib ..\lib\blas.lib ..\lib\cblas.lib	\
+		..\lib\f2c.lib ..\lib\gtest.lib advapi32.lib
 
 test/test.lib: $(test_objs) all
 	lib /out:$@ $(test_objs)
