@@ -44,8 +44,9 @@ clean:
 #
 
 test_objs = test\test_main.obj test\random_unitary_d.obj	\
-	test\random_unitary_z.obj test\random_permutation.obj \
-	test\hamilt_test.obj
+	test\random_unitary_z.obj test\random_permutation.obj	\
+	test\hamilt_test.obj test\random_product_RMPS.obj	\
+	test\random_product_CMPS.obj
 all_test_programs = test\test_quantum_spin.exe				\
 	test\test_quantum_fock.exe test\test_mps_mps.exe		\
 	test\test_mps_norm.exe test\test_mps_correlation.exe		\
