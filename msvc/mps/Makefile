@@ -14,7 +14,7 @@ mps_headers=$(nobase_include_HEADERS:mps/=$(includedir)\) \
 mps_orig_headers=$(nobase_include_HEADERS:mps/=..\include\mps\)
 mps_objects=$(libmps_la_SOURCES:.cc=.obj)
 mps_objects=$(mps_objects:/=\)
-directories=iTEBD quantum hamiltonian tools evolve dmrg mps
+directories=iTEBD quantum hamiltonian tools evolve dmrg mps mpo
 
 TARGETS=..\lib\mps.lib
 
@@ -57,8 +57,9 @@ all_test_programs = test\test_quantum_spin.exe				\
 	test\test_itebd_expected_slow.exe test\test_itebd_itime.exe	\
 	test\test_time_solver_trotter2.exe				\
 	test\test_time_solver_trotter3.exe				\
-	test\test_time_solver_arnoldi.exe test\test_dmrg.exe            \
-	test\test_mps_lform.exe test\test_mps_simplify_obc.exe
+	test\test_time_solver_arnoldi.exe test\test_dmrg.exe		\
+	test\test_mps_lform.exe test\test_mps_simplify_obc.exe		\
+	test\test_mps_solve.exe
 
 check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	for %f in ($(all_test_programs)) do %f
