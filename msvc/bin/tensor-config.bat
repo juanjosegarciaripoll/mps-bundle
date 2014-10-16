@@ -31,7 +31,7 @@ goto out
 :link
 if "%2" == "" goto missing2
 if "%3" == "" goto missing3
-cl /nologo /EHsc %TENSORDBG% /I"%TENSORDIR%\include" /Fe"%2" %3 %4 %5 %6 %7 %8 %9 "%TENSORDIR%\lib\mps.lib" "%TENSORDIR%\lib\tensor.lib" "%TENSORDIR%\lib\lapack.lib" "%TENSORDIR%\lib\cblas.lib" "%TENSORDIR%\lib\blas.lib" "%TENSORDIR%\lib\f2c.lib"
+cl /nologo /EHsc %TENSORDBG% /I"%TENSORDIR%\include" /Fe"%2" %3 %4 %5 %6 %7 %8 %9 "%TENSORDIR%\lib\mps.lib" "%TENSORDIR%\lib\tensor.lib" "%TENSORDIR%\lib\lapack.lib" "%TENSORDIR%\lib\cblas.lib" "%TENSORDIR%\lib\blas.lib" "%TENSORDIR%\lib\f2c.lib" advapi32.lib
 goto out
 
 :compile
