@@ -2,14 +2,6 @@ set -x
 #
 # Local definitions take precedence
 #
-if test -f local_vars.sh; then
-    . ./local_vars.sh
-    exit 0
-fi
-if test -f scripts/local_vars.sh; then
-    . ./scripts/local_vars.sh
-    exit 0
-fi
 case `hostname -f` in
     master*csic.es) # trueno.iff.csic.es
 	export CC=icc
@@ -70,4 +62,9 @@ case `hostname -f` in
 	    #export CXXFLAGS="$CXXFLAGS -xHOST -fno-exceptions -fomit-frame-pointer -finline-functions"
 	fi
 esac
-
+if test -f local_vars.sh; then
+    . ./local_vars.sh
+fi
+if test -f scripts/local_vars.sh; then
+    . ./scripts/local_vars.sh
+fi
