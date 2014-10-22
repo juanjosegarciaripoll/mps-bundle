@@ -37,6 +37,7 @@ $(mps_headers): $(srcdir)\include\mps
 clean:
 	-for %f in ($(TARGETS)) do if exist %f del %f
 	-for %f in ($(directories) $(includedir)) do if exist %f rd /s /q %f
+	-del test\*.exe test\*.obj
 	-del *.pdb
 
 ############################################################
@@ -54,12 +55,12 @@ all_test_programs = test\test_quantum_spin.exe				\
 	test\test_mps_simplify_many.exe					\
 	test\test_mps_simplify_many2.exe test\test_mpo_base.exe		\
 	test\test_itebd_base.exe test\test_itebd_expected.exe		\
-	test\test_itebd_expected_slow.exe test\test_itebd_itime.exe	\
+	test\test_itebd_expected_slow.exe test\test_mps_lform.exe	\
+	test\test_mps_simplify_obc.exe test\test_mps_solve.exe		\
 	test\test_time_solver_trotter2.exe				\
 	test\test_time_solver_trotter3.exe				\
-	test\test_time_solver_arnoldi.exe test\test_dmrg.exe		\
-	test\test_mps_lform.exe test\test_mps_simplify_obc.exe		\
-	test\test_mps_solve.exe
+	test\test_time_solver_arnoldi.exe test\test_itebd_itime.exe	\
+	test\test_dmrg.exe
 
 check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	for %f in ($(all_test_programs)) do %f
