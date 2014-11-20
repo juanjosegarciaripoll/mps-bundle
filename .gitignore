@@ -17,3 +17,4 @@ include
 !/msvc/mps
 !/msvc/f2c
 !/msvc/cblapack
+[0-9]*
