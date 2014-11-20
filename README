@@ -53,6 +53,7 @@ install icons in the menu to open terminals that access the compilers.
 
 Within this terminal, enter the directory mps-bundle/msvc and call
 'nmake'. This should build the libraries msvc/lib/mps.lib,
-msvc/lib/tensor.lib, msvc/lib/cblapack.lib, msvc/lib/f2c.lib. You can
-configure your projects to link against these libraries, using the
-header files in msvc/include.
+msvc/lib/tensor.lib, msvc/lib/lapack.lib, msvc/lib/cblas.lib,
+msvc/lib/blas.lib and msvc/lib/f2c.lib. You can configure your
+projects to link against these libraries, using the header files in
+msvc/include.

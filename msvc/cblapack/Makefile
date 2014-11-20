@@ -1,5 +1,6 @@
 srcdir=../../cblapack
 
+include ../Makefile.flags
 include ../../cblapack/blas.inc
 include ../../cblapack/cblas.inc
 include ../../cblapack/lapack.inc
@@ -19,11 +20,7 @@ headers=..\include\cblapack.h\
 
 TARGETS=..\lib\blas.lib ..\lib\cblas.lib ..\lib\lapack.lib $(headers)
 
-CC=cl
-LINK=link
 CPPFLAGS=/I. /I../include /I$(srcdir)/include
-CFLAGS=/O2 /nologo
-
 
 .SUFFIXES: .c .obj
 
@@ -54,3 +51,4 @@ clean:
 	-for %f in (blas\*.obj cblas\*.obj lapack\*.obj) do if exist %f del %f
 	-for %f in ($(TARGETS)) do if exist %f del %f
 	-rd ..\include\cblapack
+	-del *.pdb
