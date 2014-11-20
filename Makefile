@@ -68,7 +68,7 @@ push:
 	for i in cblapack tensor f2c mps ./; do (test -d $$i && cd $$i && git push); done
 
 status:
-	for i in cblapack tensor f2c mps ./; do (test -d $$i && echo Status of $$i && cd $$i && git status); done
+	for i in cblapack tensor f2c mps ./; do (test -d $$i && echo '****************************' && echo '*** Status of '$$i && cd $$i && git status); done
 
 #
 # Build only if version has changed or the tag file is absent
