@@ -60,7 +60,7 @@ all_test_programs = test\test_quantum_spin.exe				\
 	test\test_time_solver_trotter2.exe				\
 	test\test_time_solver_trotter3.exe				\
 	test\test_time_solver_arnoldi.exe test\test_itebd_itime.exe	\
-	test\test_dmrg.exe
+	test\test_mps_minimizer.exe
 
 check: ..\lib\gtest.lib test\test.lib $(all_test_programs)
 	for %f in ($(all_test_programs)) do %f
