@@ -6,10 +6,13 @@ TENSOR_CONFIG=..\bin\tensor-config.bat
 SOURCES=project.cc
 
 # Name of the executable file
-EXE=project.exe
+PROGRAM=project.exe
 
-all:
-	$(TENSOR_CONFIG) --link $(EXE) $(SOURCES)
+$(PROGRAM):
+	$(TENSOR_CONFIG) --link $(PROGRAM) $(SOURCES)
+
+run: $(PROGRAM)
+	$(PROGRAM)
 
 clean:
 	for %i in (*.exe *.obj) do del %i

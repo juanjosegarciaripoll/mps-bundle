@@ -1,12 +1,17 @@
-PROGRAM=exp_0.exe
+# Location of the script that builds programs
+TENSOR_CONFIG=../bin/tensor-config
 
-%.exe: %.cc common.cc
-	../bin/tensor-config --link -o $@ $< -O2 -lmps
+# List of files that make up our program
+SOURCES=project.cc
 
-all: $(PROGRAM)
+# Name of the executable file
+PROGRAM=./project.exe
+
+$(PROGRAM):
+	$(TENSOR_CONFIG) --link -o $(PROGRAM) $(SOURCES)
 
 run: $(PROGRAM)
 	$(PROGRAM)
 
 clean:
-	rm -rf *.exe *.dSYM
+	rm -rf $(PROGRAM) *.o *.dSYM
