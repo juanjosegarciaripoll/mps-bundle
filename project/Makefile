@@ -8,7 +8,7 @@ SOURCES=project.cc
 PROGRAM=./project.exe
 
 $(PROGRAM):
-	$(TENSOR_CONFIG) --link -o $(PROGRAM) $(SOURCES)
+	$(TENSOR_CONFIG) --link -o $(PROGRAM) $(SOURCES) -lmps
 
 run: $(PROGRAM)
 	$(PROGRAM)
