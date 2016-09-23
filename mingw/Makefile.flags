@@ -1,11 +1,13 @@
+SHELL=cmd.exe
 CXX=cl
-LINK=link
-!ifndef DEBUG
+LINK=gcc
+LD=ld
+ifndef DEBUG
 DEBUG=0
-!endif
-!if $(DEBUG)
-CXXFLAGS=/O2 /Zi /nologo /EHsc
-!else
-CXXFLAGS=/O2 /nologo /EHsc
-!endif
+endif
+ifeq ($(DEBUG),0)
+CXXFLAGS=-O2 -g
+else
+CXXFLAGS=-O2
+endif
 CFLAGS=$(CXXFLAGS)

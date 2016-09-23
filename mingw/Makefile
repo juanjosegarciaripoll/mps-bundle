@@ -19,6 +19,12 @@ lib/mps.lib: lib/tensor.lib
 	nmake DEBUG=$(DEBUG)
 	cd ..
 
+download:
+	cd .. && for %%i in (f2c tensor mps) do git clone https://github.com/juanjosegarciaripoll/%%i.git
+
+update:
+	for %%i in (f2c tensor mps) do (cd ../%%i && git pull)
+
 clean:
 	cd f2c
 	nmake /nologo clean DEBUG=$(DEBUG)
