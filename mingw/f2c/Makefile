@@ -226,5 +226,5 @@ $(headers):
 	for %%i in (f2c_inline.h f2c.h f2c_types_win.h) do copy ..\..\f2c\include\%%i ..\include
 
 clean:
-	-for %%f in (obj\*.obj lib\*.a ..\bin\f2c.exe ..\lib\libf2c.a ..\include\f2c_inline.h ..\include\f2c.h ..\include\f2c_types_win.h) do if exist %%f del %%f
+	-for %%f in (obj\*.obj lib\*.obj lib\*.a ..\bin\f2c.exe ..\lib\libf2c.a ..\include\f2c_inline.h ..\include\f2c.h ..\include\f2c_types_win.h) do if exist %%f del %%f
 
