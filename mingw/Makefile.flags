@@ -1,7 +1,8 @@
 SHELL=cmd.exe
-CXX=cl
+CC=gcc
+CXX=gcc
 LINK=gcc
-LD=ld
+AR=gcc-ar
 ifndef DEBUG
 DEBUG=0
 endif
