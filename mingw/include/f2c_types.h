@@ -20,8 +20,8 @@ extern "C" {
 
 typedef int integer;
 typedef unsigned int uinteger;
-typedef __int64 longint;
-typedef unsigned __int64 ulongint;
+typedef long long longint;
+typedef unsigned long long ulongint;
 /*#define INTEGER_STAR_8*/
 
 typedef char integer1;
