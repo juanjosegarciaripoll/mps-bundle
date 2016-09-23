@@ -218,8 +218,8 @@ all: $(TARGETS)
 ../bin/f2c.exe: $(f2c_objs)
 	$(LINK) -o $@ $(f2c_objs)
 
-../lib/f2c.a: $(libf2c_objs)
-	-del ..\lib\f2c.a
+../lib/libf2c.a: $(libf2c_objs)
+	-del ..\lib\libf2c.a
 	$(AR) r $@ $(libf2c_objs)
 
 $(headers):
