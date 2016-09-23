@@ -45,10 +45,10 @@ all: $(TARGETS)
 
 $(headers):
 	-md ..\include\cblapack
-	copy ..\..\cblapack\blas\include\cblapack.h ..\include
-	copy ..\..\cblapack\blas\include\cblapack\blas.h ..\include\cblapack
-	copy ..\..\cblapack\blas\include\cblapack\lapack.h ..\include\cblapack
-	copy ..\..\cblapack\blas\include\cblapack\cblas.h ..\include\cblapack
+	copy ..\..\cblapack\include\cblapack.h ..\include
+	copy ..\..\cblapack\include\cblapack\blas.h ..\include\cblapack
+	copy ..\..\cblapack\include\cblapack\clapack.h ..\include\cblapack
+	copy ..\..\cblapack\include\cblapack\cblas.h ..\include\cblapack
 
 clean:
 	-for %f in (blas\*.obj cblas\*.obj lapack\*.obj) do if exist %f del %f
