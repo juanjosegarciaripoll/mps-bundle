@@ -1,0 +1,11 @@
+CXX=cl
+LINK=link
+!ifndef DEBUG
+DEBUG=0
+!endif
+!if $(DEBUG)
+CXXFLAGS=/O2 /Zi /nologo /EHsc
+!else
+CXXFLAGS=/O2 /nologo /EHsc
+!endif
+CFLAGS=$(CXXFLAGS)
