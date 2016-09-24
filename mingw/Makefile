@@ -20,10 +20,10 @@ lib/mps.lib: lib/tensor.lib
 	cd ..
 
 download:
-	cd .. && for %%i in (f2c tensor mps) do git clone https://github.com/juanjosegarciaripoll/%%i.git
+	cd .. && for %%i in (f2c cblapack tensor mps) do git clone https://github.com/juanjosegarciaripoll/%%i.git
 
 update:
-	for %%i in (f2c tensor mps) do (cd ../%%i && git pull)
+	for %%i in (f2c cblapack tensor mps) do (cd ../%%i && git pull)
 
 clean:
 	cd f2c
