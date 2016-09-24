@@ -1,28 +1,26 @@
-srcdir=..\..\tensor
-includedir=..\include\tensor
-top_builddir=..
+msvcgtest=../../msvc/gtest
 
-CXX=cl
-CPPFLAGS=/I. /I..\include
-CXXFLAGS=/O2 /nologo /EHsc
+include ../Makefile.flags
 
-TARGETS=..\include\gtest\gtest.h ..\lib\gtest.lib
+CPPFLAGS=-I. -I../include -I$(msvcgtest)
+
+TARGETS=../include/gtest/gtest.h ../lib/libgtest.a
 objects=gtest-all.obj gtest_main.obj
 
 .SUFFIXES: .cc .f
 
-.cc.obj:
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) /c /Fo$@ $<
+%.obj: $(msvcgtest)/%.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 all: $(TARGETS)
 
-..\lib\gtest.lib: $(objects)
-	lib /out:$@ $(objects)
+../lib/libgtest.a: $(objects)
+	$(AR) r $@ $(objects)
 
-..\include\gtest\gtest.h: gtest.h
+../include/gtest/gtest.h: $(msvcgtest)/gtest.h
 	-md ..\include\gtest
-	copy gtest.h $@
+	copy $(subst /,\,$< $@)
 
 clean:
-	-for %f in ($(objects) $(TARGETS)) do if exist %f del %f
-	-if exist ..\include\gtest rd /s /q  ..\include\gtest
+	-for %%f in $(subst /,\,($(objects) $(TARGETS))) do if exist %%f del %%f
+	-if exist ..\include\gtest rd \s \q  ..\include\gtest
