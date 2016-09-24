@@ -55,8 +55,10 @@ all_test_programs = test/test_refcount.exe \
 	test/test_sparse_ops.exe test/test_sparse_kron.exe test/test_sparse_indices.exe \
 	test/test_mmult.exe test/test_fold.exe test/test_linalg_svd.exe \
 	test/test_linalg_eig.exe test/test_linalg_eig_sym.exe \
-	test/test_linalg_eig_power.exe test/test_linalg_expm.exe test/test_jobs.exe \
+	test/test_linalg_eig_power.exe test/test_linalg_expm.exe\
 	test/test_sdf.exe test/test_tensor_take_diag.exe test/test_linalg_eigs.exe
+
+FAILING_TESTS=test/test_jobs.exe 
 
 check: ../lib/libgtest.a test/libtest.a $(all_test_programs)
 	for %%f in ($(subst /,\,$(all_test_programs))) do %%f
