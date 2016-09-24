@@ -28,7 +28,7 @@ CONFIG_FLAGS=
 TAG=$(ROOT)/lib/.$(WHICH)-tag
 NEWTAG=$(TAG)-new
 NOTAG=$(TAG)-no
-LOG=$(BUILD)/log
+LOG=$(ROOT)/build/log.$(WHICH)
 
 .PHONY: all build update build-this pull-this update-this \
 	build-f2c build-cblapack build-tensor build-mps clean distclean
@@ -40,7 +40,7 @@ build: build-f2c build-tensor build-mps
 build-mps: build-tensor mps
 	$(MAKE) build-this WHICH=mps
 build-tensor: build-f2c tensor
-	if [ -d cblapack ]; then config="--with-cblapack";  make build-cblapack; fi; \
+	if [ -d cblapack ]; then config="--with-cblapack";  $(MAKE) build-cblapack; fi; \
 	$(MAKE) build-this WHICH=tensor CONFIG_FLAGS="$$config"
 build-cblapack: build-f2c
 	$(MAKE) build-this WHICH=cblapack
@@ -89,14 +89,14 @@ build-this:
 	    echo %%% Library $(WHICH) must be rebuilt; \
 	    echo %%% ; \
 	    rm $(TAG); mv $(NEWTAG) $(TAG); \
-	    make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
+	    $(MAKE) do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
 	  fi; \
 	else \
 	  echo %%%; \
 	  echo %%% First time build of $(WHICH) ; \
 	  echo %%%; \
 	  mv $(NEWTAG) $(TAG); \
-	  make do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
+	  $(MAKE) do-build WHICH=$(WHICH) 2>&1 | tee $(LOG); \
 	fi; \
 	rm -f $(NEWTAG)
 
@@ -107,7 +107,6 @@ do-build:
 	mv $(TAG) $(NOTAG)
 	PATH=$(BINDIR):$$PATH; \
 	  . $(ROOT)/scripts/mps_env.sh $(WHICH); \
-	  set && \
 	  cd $(BUILD) && \
 	  $(CONFIG) --prefix=$(ROOT) --disable-shared $(CONFIG_FLAGS) \
 	    LDFLAGS="$(LDFLAGS) $$LDFLAGS -L$(LIBDIR) -Wl,-rpath,$(LIBDIR)" \
@@ -131,7 +130,7 @@ distclean: clean
 
 DEST=
 upload: $(LIBRARIES)
-	make update
+	$(MAKE) update
 	if [ -z "$(DEST)" ]; then \
 	   echo Please specify a cluster through the variable DEST; \
 	else \
