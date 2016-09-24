@@ -1,8 +1,11 @@
-set -x
 #
 # Local definitions take precedence
 #
-case `hostname -f` in
+case `uname` in
+    *BSD) THEHOST=`hostname`;;
+    *) THEHOST=`hostname -f`;;
+esac
+case $THEHOST in
     master*csic.es) # trueno.iff.csic.es
 	export CC=icc
 	export CXX=icpc
