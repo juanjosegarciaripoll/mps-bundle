@@ -18,3 +18,4 @@ include
 !/msvc/f2c
 !/msvc/cblapack
 [0-9]*
+scripts/local_vars.sh
